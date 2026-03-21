@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { useAuth } from '../provider';
 
+// Hook to get the currently logged-in user
 export function useUser() {
   const auth = useAuth();
   const [user, setUser] = useState<User | null>(null);

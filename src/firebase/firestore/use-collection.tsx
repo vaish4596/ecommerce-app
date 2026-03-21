@@ -5,6 +5,7 @@ import { Query, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firesto
 import { errorEmitter } from '../error-emitter';
 import { FirestorePermissionError } from '../errors';
 
+// Hook to get a real-time list of items from a Firestore collection
 export function useCollection(query: Query | null) {
   const [data, setData] = useState<DocumentData[] | null>(null);
   const [loading, setLoading] = useState(true);

@@ -6,6 +6,7 @@ export type SecurityRuleContext = {
   requestResourceData?: any;
 };
 
+// Custom error for Firebase permission issues
 export class FirestorePermissionError extends Error {
   context: SecurityRuleContext;
 

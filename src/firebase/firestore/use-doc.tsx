@@ -5,6 +5,7 @@ import { DocumentReference, onSnapshot, DocumentSnapshot, DocumentData } from 'f
 import { errorEmitter } from '../error-emitter';
 import { FirestorePermissionError } from '../errors';
 
+// Hook to get a single real-time document from Firestore
 export function useDoc(docRef: DocumentReference | null) {
   const [data, setData] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
