@@ -1,0 +1,59 @@
+
+[
+  {
+    "id": "1",
+    "name": "ProMax Smartphone X1",
+    "description": "A high-performance smartphone with a 6.7-inch OLED display, triple-lens camera system, and ultra-fast processing speed.",
+    "price": 74999,
+    "category": "Electronics",
+    "image": "https://picsum.photos/seed/elec1/600/400"
+  },
+  {
+    "id": "2",
+    "name": "AcousticFlow Wireless Headphones",
+    "description": "Experience pure sound with noise-canceling technology and 40-hour battery life. Perfect for long travel and work sessions.",
+    "price": 12999,
+    "category": "Electronics",
+    "image": "https://picsum.photos/seed/elec2/600/400"
+  },
+  {
+    "id": "3",
+    "name": "Classic Cotton Kurta - Indigo",
+    "description": "A comfortable and breathable traditional cotton kurta, perfect for daily wear or festive occasions. Ethically sourced cotton.",
+    "price": 1499,
+    "category": "Clothing",
+    "image": "https://picsum.photos/seed/cloth1/600/400"
+  },
+  {
+    "id": "4",
+    "name": "Premium Linen Summer Shirt",
+    "description": "Lightweight linen shirt in a modern fit. Ideal for warm climates and semi-formal outings.",
+    "price": 2499,
+    "category": "Clothing",
+    "image": "https://picsum.photos/seed/cloth2/600/400"
+  },
+  {
+    "id": "5",
+    "name": "Chronicles of Ancient India",
+    "description": "A deep dive into the rich cultural and political history of the Indian subcontinent, from the Indus Valley to the modern era.",
+    "price": 799,
+    "category": "Books",
+    "image": "https://picsum.photos/seed/book1/600/400"
+  },
+  {
+    "id": "6",
+    "name": "Artisanal Brass Diya Set",
+    "description": "A set of 4 handcrafted brass diyas, polished to a gold-like finish. Brings a touch of tradition and warmth to your home.",
+    "price": 1250,
+    "category": "Home & Decor",
+    "image": "https://picsum.photos/seed/home1/600/400"
+  },
+  {
+    "id": "7",
+    "name": "Minimalist Ceramic Flower Vase",
+    "description": "Sleek, matte-finish ceramic vase. Its neutral tone complements any modern interior design.",
+    "price": 1850,
+    "category": "Home & Decor",
+    "image": "https://picsum.photos/seed/home2/600/400"
+  }
+]

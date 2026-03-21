@@ -1,0 +1,47 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "electronics-1",
+      "description": "High-end Smartphone",
+      "imageUrl": "https://picsum.photos/seed/elec1/600/400",
+      "imageHint": "smartphone technology"
+    },
+    {
+      "id": "electronics-2",
+      "description": "Premium Wireless Headphones",
+      "imageUrl": "https://picsum.photos/seed/elec2/600/400",
+      "imageHint": "headphones audio"
+    },
+    {
+      "id": "clothing-1",
+      "description": "Traditional Cotton Kurta",
+      "imageUrl": "https://picsum.photos/seed/cloth1/600/400",
+      "imageHint": "traditional clothing"
+    },
+    {
+      "id": "clothing-2",
+      "description": "Casual Linen Shirt",
+      "imageUrl": "https://picsum.photos/seed/cloth2/600/400",
+      "imageHint": "linen shirt"
+    },
+    {
+      "id": "books-1",
+      "description": "Indian History Anthology",
+      "imageUrl": "https://picsum.photos/seed/book1/600/400",
+      "imageHint": "history book"
+    },
+    {
+      "id": "home-1",
+      "description": "Handcrafted Brass Diya",
+      "imageUrl": "https://picsum.photos/seed/home1/600/400",
+      "imageHint": "brass diya"
+    },
+    {
+      "id": "home-2",
+      "description": "Modern Ceramic Vase",
+      "imageUrl": "https://picsum.photos/seed/home2/600/400",
+      "imageHint": "ceramic vase"
+    }
+  ]
+}
