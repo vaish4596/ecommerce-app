@@ -1,13 +1,12 @@
 
-import type {Metadata} from 'next';
+"use client";
+
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { Toaster } from '@/components/ui/toaster';
+import { initializeFirebase, FirebaseClientProvider } from '@/firebase';
 
-export const metadata: Metadata = {
-  title: 'Catalyst Catalog | Modern eCommerce',
-  description: 'Your premium shopping destination for electronics, clothing, and home decor.',
-};
+const { firebaseApp, auth, firestore } = initializeFirebase();
 
 export default function RootLayout({
   children,
@@ -22,10 +21,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body bg-background text-foreground antialiased">
-        <CartProvider>
-          {children}
-          <Toaster />
-        </CartProvider>
+        <FirebaseClientProvider firebaseApp={firebaseApp} auth={auth} firestore={firestore}>
+          <CartProvider>
+            {children}
+            <Toaster />
+          </CartProvider>
+        </FirebaseClientProvider>
       </body>
     </html>
   );
