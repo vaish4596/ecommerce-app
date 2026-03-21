@@ -29,7 +29,16 @@ This project was built in Firebase Studio using Next.js, React, and Tailwind CSS
    ```
 6. **View the App**: Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
-- `src/app`: The pages and logic of the website.
-- `src/components`: Reusable parts like the Navbar and Product Cards.
-- `src/firebase`: Connection to the database and login system.
+## How to add this to GitHub:
+1. Create a new empty repository on [GitHub](https://github.com/new).
+2. Open your terminal (command prompt) in your project folder.
+3. Run these commands one by one:
+   ```bash
+   git init
+   git add .
+   git commit -m "First version of my store"
+   git branch -M main
+   git remote add origin YOUR_GITHUB_REPO_URL
+   git push -u origin main
+   ```
+   *(Replace `YOUR_GITHUB_REPO_URL` with the link GitHub gives you, like https://github.com/username/repo.git)*
