@@ -1,45 +1,69 @@
 
-# Catalyst Catalog - Local Setup
+# 🛍️ Catalyst Catalog - Simple Online Store
 
-This project was built in Firebase Studio using Next.js, React, and Tailwind CSS.
+A clean and high-performance e-commerce store built with **Next.js**, **Tailwind CSS**, and **Firebase**. 
 
-## How to use this project on your computer:
+---
 
-1. **Copy the Files**: Create a folder on your computer and copy all the files from this project into it.
-2. **Install Node.js**: Make sure you have Node.js installed on your computer.
-3. **Install Dependencies**: Open your terminal in the project folder and run:
-   ```bash
-   npm install
-   ```
-4. **Set Up Firebase**: 
-   - Go to the [Firebase Console](https://console.firebase.google.com/).
-   - Create a new project.
-   - Add a "Web App" to get your Firebase configuration.
-   - Create a file named `.env.local` in your project root and add your keys:
-     ```
-     NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-     NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_id
-     NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-     ```
-5. **Run the Project**:
-   ```bash
-   npm run dev
-   ```
-6. **View the App**: Open [http://localhost:3000](http://localhost:3000) in your browser.
+## ✨ Features Implemented
+- **Product Catalog**: Browse items with real-time price sorting and category-based filtering.
+- **Dynamic Product Pages**: Dedicated pages for every item showing full descriptions and specifications.
+- **Persistent Shopping Cart**: Add/remove items and manage quantities. Uses **LocalStorage** so your cart stays saved even if you refresh the page.
+- **User Authentication**: Secure Login and Signup powered by **Firebase Auth** (supports Email/Password and Google Login).
+- **Cloud Wishlist**: Logged-in users can save favorite items to a personal wishlist stored in **Firebase Firestore**.
+- **Mock Checkout**: A realistic checkout flow that simulates payment processing and order success.
+- **Responsive Design**: Fully mobile-friendly UI built with Tailwind CSS.
 
-## How to add this to GitHub:
-1. Create a new empty repository on [GitHub](https://github.com/new).
-2. Open your terminal (command prompt) in your project folder.
-3. Run these commands one by one:
-   ```bash
-   git init
-   git add .
-   git commit -m "First version of my store"
-   git branch -M main
-   git remote add origin YOUR_GITHUB_REPO_URL
-   git push -u origin main
-   ```
-   *(Replace `YOUR_GITHUB_REPO_URL` with the link GitHub gives you, like https://github.com/username/repo.git)*
+---
+
+## 🛠️ Tech Stack Used
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) for modern, responsive layouts.
+- **Backend/Database**: [Firebase](https://firebase.google.com/) (Firestore for data, Auth for users).
+- **Icons**: [Lucide React](https://lucide.dev/) for clean, scalable icons.
+- **Language**: [TypeScript](https://www.typescriptlang.org/) for type-safe, bug-free code.
+- **State Management**: React Context API for global Shopping Cart state.
+
+---
+
+## 🔌 API Endpoints (Local)
+The app uses Next.js Route Handlers to serve product data from a JSON database:
+
+- `GET /api/products`: Returns the full list of products.
+  - **Query Params**: 
+    - `category`: Filter by category (e.g., `?category=Electronics`).
+    - `q`: Search for products by name (e.g., `?q=phone`).
+- `GET /api/products/[id]`: Returns detailed data for a specific product by its ID.
+
+---
+
+## 🚀 How to Run Locally
+
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Set Up Firebase
+Create a `.env.local` file in the root folder and add your Firebase credentials:
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+### 3. Start Development Server
+```bash
+npm run dev
+```
+
+---
+
+## 🧠 Challenges Faced
+- **Hydration Mismatches**: Dealing with LocalStorage in Next.js was tricky because the server doesn't have access to the browser's storage. I solved this by using `useEffect` to load the cart data only after the client has mounted.
+- **Firebase Initialization**: Preventing the app from crashing when Firebase API keys are missing. I implemented a "defensive" check in the Firebase config to ensure the app stays alive even without a connection.
+- **Real-time Syncing**: Making the Wishlist update instantly across different pages. I used Firestore's `onSnapshot` listener to ensure that if you "Heart" an item on the home page, it appears in the Wishlist page immediately without a refresh.
+- **Complexity Management**: Stripping down advanced UI libraries to keep the code easy to copy and understand for developers who prefer standard HTML/CSS patterns.
