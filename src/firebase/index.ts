@@ -1,33 +1,56 @@
+
 'use client';
 
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { firebaseConfig } from './config';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged, User, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
 
-/**
- * Initializes Firebase. 
- * We check if the API key is valid before trying to get Auth or Firestore 
- * to avoid "invalid-api-key" errors during initial setup.
- */
-export function initializeFirebase() {
-  const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-  
-  // We only initialize services if a valid API key is present.
-  // This prevents the app from crashing if keys aren't set up yet.
-  const auth = firebaseConfig.apiKey && firebaseConfig.apiKey !== "undefined" 
-    ? getAuth(firebaseApp) 
-    : null;
-    
-  const firestore = firebaseConfig.apiKey && firebaseConfig.apiKey !== "undefined"
-    ? getFirestore(firebaseApp)
-    : null;
+// Use the environment variables or empty strings if not provided
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || ""
+};
 
-  return { firebaseApp, auth, firestore };
+// We check if the API key is valid before trying to start Firebase
+// This prevents the "invalid-api-key" crash
+const isConfigValid = firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
+
+let app: FirebaseApp | undefined;
+let auth: Auth | undefined;
+let db: Firestore | undefined;
+
+if (isConfigValid) {
+  try {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (error) {
+    console.error("Firebase failed to initialize:", error);
+  }
 }
 
-export * from './provider';
-export * from './client-provider';
-export * from './auth/use-user';
-export * from './firestore/use-collection';
-export * from './firestore/use-doc';
+export { auth, db };
+
+// Simple User Hook that won't break if auth is missing
+export function useUser() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+    return onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setLoading(false);
+    });
+  }, []);
+
+  return { user, loading };
+}

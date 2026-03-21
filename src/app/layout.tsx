@@ -3,30 +3,21 @@
 
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
+import { Navbar } from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
-import { initializeFirebase, FirebaseClientProvider } from '@/firebase';
 
-const { firebaseApp, auth, firestore } = initializeFirebase();
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <title>Catalyst Catalog</title>
       </head>
-      <body className="font-body bg-background text-foreground antialiased">
-        <FirebaseClientProvider firebaseApp={firebaseApp} auth={auth} firestore={firestore}>
-          <CartProvider>
-            {children}
-            <Toaster />
-          </CartProvider>
-        </FirebaseClientProvider>
+      <body className="bg-slate-50 text-slate-900 antialiased">
+        <CartProvider>
+          <Navbar />
+          {children}
+          <Toaster />
+        </CartProvider>
       </body>
     </html>
   );

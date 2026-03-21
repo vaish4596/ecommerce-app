@@ -1,3 +1,4 @@
+
 # Catalyst Catalog - Local Setup
 
 This project was built in Firebase Studio using Next.js, React, and Tailwind CSS.
