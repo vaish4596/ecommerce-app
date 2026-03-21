@@ -1,18 +1,12 @@
-
 "use client";
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Plus, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Product, useCart } from '@/context/CartContext';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { useUser, useFirestore } from '@/firebase';
+import { useUser, useFirestore, useDoc } from '@/firebase';
 import { doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
-import { useDoc } from '@/firebase';
-import { cn } from '@/lib/utils';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -22,114 +16,58 @@ export function ProductCard({ product }: { product: Product }) {
   const { user } = useUser();
   const db = useFirestore();
 
-  // Check if product is in wishlist
   const wishlistDocRef = user && db ? doc(db, 'users', user.uid, 'wishlist', product.id) : null;
-  const { data: wishlistItem, loading: wishlistLoading } = useDoc(wishlistDocRef);
+  const { data: wishlistItem } = useDoc(wishlistDocRef);
   const isInWishlist = !!wishlistItem;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
     addToCart(product);
-    toast({
-      title: "Added to Cart",
-      description: `${product.name} has been added to your shopping bag.`,
-    });
+    toast({ title: "Added to Cart", description: `${product.name} is in your bag.` });
   };
 
   const toggleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
-
     if (!user || !db) {
-      toast({
-        title: "Login Required",
-        description: "Please login to save items to your wishlist.",
-        variant: "destructive",
-      });
+      toast({ title: "Login Required", description: "Please login to save items.", variant: "destructive" });
       return;
     }
 
     const docRef = doc(db, 'users', user.uid, 'wishlist', product.id);
-
     if (isInWishlist) {
-      deleteDoc(docRef).catch((e) => {
-        errorEmitter.emit('permission-error', new FirestorePermissionError({
-          path: docRef.path,
-          operation: 'delete'
-        }));
-      });
-      toast({
-        title: "Removed from Wishlist",
-        description: `${product.name} has been removed.`,
-      });
+      deleteDoc(docRef).catch(() => errorEmitter.emit('permission-error', new FirestorePermissionError({ path: docRef.path, operation: 'delete' })));
     } else {
-      setDoc(docRef, {
-        productId: product.id,
-        addedAt: serverTimestamp(),
-      }).catch((e) => {
-        errorEmitter.emit('permission-error', new FirestorePermissionError({
-          path: docRef.path,
-          operation: 'create',
-          requestResourceData: { productId: product.id }
-        }));
-      });
-      toast({
-        title: "Added to Wishlist",
-        description: `${product.name} has been saved.`,
-      });
+      setDoc(docRef, { productId: product.id, addedAt: serverTimestamp() }).catch(() => errorEmitter.emit('permission-error', new FirestorePermissionError({ path: docRef.path, operation: 'create' })));
     }
   };
 
   return (
-    <Card className="group overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 bg-white relative">
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn(
-          "absolute top-3 right-3 z-10 rounded-full bg-white/80 backdrop-blur-sm transition-all hover:bg-white",
-          isInWishlist ? "text-red-500" : "text-muted-foreground"
-        )}
+    <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', overflow: 'hidden', position: 'relative' }}>
+      <button 
         onClick={toggleWishlist}
-        disabled={wishlistLoading}
+        style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', zIndex: 10, background: 'rgba(255,255,255,0.8)', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer', color: isInWishlist ? '#ef4444' : '#9ca3af' }}
       >
-        <Heart className={cn("w-5 h-5", isInWishlist && "fill-current")} />
-      </Button>
+        <Heart style={{ width: '1.25rem', height: '1.25rem', fill: isInWishlist ? 'currentColor' : 'none' }} />
+      </button>
 
-      <Link href={`/product/${product.id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-muted">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            data-ai-hint="product image"
-          />
-          <Badge className="absolute top-3 left-3 bg-white/90 text-primary border-none text-xs backdrop-blur-sm">
-            {product.category}
-          </Badge>
+      <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div style={{ position: 'relative', aspectRatio: '1/1', backgroundColor: '#f3f4f6' }}>
+          <Image src={product.image} alt={product.name} fill style={{ objectFit: 'cover' }} />
         </div>
-        <CardContent className="p-4">
-          <h3 className="font-headline font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
-            {product.name}
-          </h3>
-          <p className="text-muted-foreground text-sm line-clamp-1 mt-1">
-            Premium selection
-          </p>
-        </CardContent>
+        <div style={{ padding: '1rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600' }}>{product.name}</h3>
+          <p style={{ color: '#6b7280', fontSize: '0.875rem', margin: '0.25rem 0' }}>{product.category}</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+            <span style={{ fontSize: '1.125rem', fontWeight: 'bold' }}>₹{product.price.toLocaleString('en-IN')}</span>
+            <button 
+              onClick={handleAddToCart}
+              style={{ backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '50%', width: '2.5rem', height: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+            >
+              <Plus />
+            </button>
+          </div>
+        </div>
       </Link>
-      <CardFooter className="p-4 pt-0 flex items-center justify-between">
-        <span className="text-xl font-bold text-foreground">
-          ₹{product.price.toLocaleString('en-IN')}
-        </span>
-        <Button 
-          size="icon" 
-          onClick={handleAddToCart}
-          className="rounded-full w-10 h-10 bg-accent hover:bg-accent/90 shadow-lg shadow-accent/20"
-        >
-          <Plus className="w-5 h-5" />
-        </Button>
-      </CardFooter>
-    </Card>
+    </div>
   );
 }
